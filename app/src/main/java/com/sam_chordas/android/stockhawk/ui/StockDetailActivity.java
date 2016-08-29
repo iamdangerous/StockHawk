@@ -36,7 +36,7 @@ public class StockDetailActivity extends Activity {
     void plotData(ArrayList stockDetailArrayList)
     {
         List<Entry> entries = new ArrayList<>();
-        for(int i=0;i<stockDetailArrayList.size();++i)
+        for(int i=stockDetailArrayList.size()-1;i>-1;--i)
         {
             StockDetail stockDetail = (StockDetail) stockDetailArrayList.get(i);
 
