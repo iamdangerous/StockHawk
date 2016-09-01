@@ -1,19 +1,61 @@
-<FrameLayout android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/widget_margin"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/frame_widget"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/widget_margin">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/material_blue_500">
-        <TextView
-            android:layout_gravity="center"
-            android:text="Hello world"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/grey_2"
+        android:padding="@dimen/widget_margin">
+
+        <RelativeLayout
+            android:id="@+id/relative_layout_inner"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/material_green_700"
+            android:padding="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/stock"
+                android:textColor="@color/white_1"
+                android:textSize="36sp" />
+
+            <ImageView
+                android:id="@+id/image_view_add"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_add_white" />
+
+
+        </RelativeLayout>
+
+        <ListView
+            android:layout_below="@+id/relative_layout_inner"
+            android:id="@+id/list_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-    </LinearLayout>
+
+        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:text="@string/empty_view_text"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
 
 </FrameLayout>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.sam_chordas.android.stockhawk" >
+    package="com.sam_chordas.android.stockhawk">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
@@ -16,10 +16,10 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".ui.MyStocksActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,7 +31,7 @@
         <service
             android:name=".service.StockTaskService"
             android:exported="true"
-            android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE" >
+            android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE">
             <intent-filter>
                 <action android:name="com.google.android.gms.gcm.ACTION_TASK_READY" />
             </intent-filter>
@@ -44,13 +44,31 @@
             android:exported="false" />
 
         <activity android:name=".ui.MainActivityasd" />
-        <receiver android:name=".widget.MyWidgetProvider" >
+
+        <receiver android:name=".widget.MyWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.sam_chordas.android.stockhawk.service.stockTaskService" />
+                <action android:name="WidgetActivity" />
+
             </intent-filter>
-            <meta-data android:name="android.appwidget.provider"
+
+            <meta-data
+                android:name="android.appwidget.provider"
                 android:resource="@xml/appwidget_info" />
         </receiver>
+        <service
+            android:name=".service.ListWidgetService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+
+        <activity android:name=".ui.WidgetConfigurationActivity">
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity android:name=".ui.WidgetActivity"></activity>
     </application>
 
 </manifest>

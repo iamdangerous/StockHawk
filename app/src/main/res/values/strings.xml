@@ -13,6 +13,13 @@
     <string name="add_btn">Add New Stock</string>
     <string name="stock_avail">stock_avail</string>
     <string name="stock_name">stock_name</string>
+    <string name="click_add">Tap to add stock</string>
+    <string name="config_activity">This is configuration activity</string>
+    <string name="stock">Stock</string>
+    <string name="cancel">Cancel</string>
+    <string name="done">Done</string>
+    <string name="empty_view_text">Nothing to display</string>
+    <string name="stock_widget_item_list">stockWidgetItemList</string>
 
 
 </resources>
