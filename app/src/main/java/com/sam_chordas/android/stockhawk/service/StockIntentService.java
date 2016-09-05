@@ -18,8 +18,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by sam_chordas on 10/1/15.
@@ -41,8 +44,25 @@ public class StockIntentService extends IntentService {
 
         if (intent.getStringExtra("job").equals("history")) {
 
+            String startDate  = "2016-01-01";
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            String endDate = sdf.format(new Date());;
+
+            String arr[] = endDate.split("-");
+            int customStartMonth = Integer.parseInt(arr[1]);
+
+            if(customStartMonth<3)
+            {
+                customStartMonth = 1;
+            }else {
+                customStartMonth = Integer.parseInt(arr[1]) - 2;
+            }
+
+            String formattedStartDate = arr[0]+"-"+String.valueOf(customStartMonth)+"-"+arr[2];
+            Log.d(TAG,"formatted End Date"+formattedStartDate);
+
             String symbol = intent.getStringExtra("symbol");
-            String url = "\thttps://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.historicaldata%20where%20symbol%20%3D%20%22"+symbol+"%22%20and%20startDate%20%3D%20%222016-08-01%22%20and%20endDate%20%3D%20%222016-08-08%22&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=";
+            String url = "\thttps://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.historicaldata%20where%20symbol%20%3D%20%22"+symbol+"%22%20and%20startDate%20%3D%20%22"+formattedStartDate+"%22%20and%20endDate%20%3D%20%22"+endDate+"%22&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=";
             Request request = new Request.Builder()
                     .url(url)
                     .build();

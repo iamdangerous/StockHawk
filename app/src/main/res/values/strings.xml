@@ -20,6 +20,7 @@
     <string name="done">Done</string>
     <string name="empty_view_text">Nothing to display</string>
     <string name="stock_widget_item_list">stockWidgetItemList</string>
+    <string name="stock_detail">Stock Detail</string>
 
 
 </resources>

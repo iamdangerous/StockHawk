@@ -24,6 +24,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -42,7 +43,10 @@ import com.google.android.gms.gcm.Task;
 import com.melnykov.fab.FloatingActionButton;
 import com.sam_chordas.android.stockhawk.touch_helper.SimpleItemTouchHelperCallback;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class MyStocksActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -53,7 +57,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
-    String TAG ="StockActivity";
+    String TAG = "StockActivity";
     private CharSequence mTitle;
     private Intent mServiceIntent;
     private ItemTouchHelper mItemTouchHelper;
@@ -63,29 +67,34 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     private Cursor mCursor;
     boolean isConnected;
     boolean isReceiverRegistered;
+    TextView tvNoInternet;
+    ConnectivityManager cm;
+    NetworkInfo activeNetwork;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
-        ConnectivityManager cm =
-                (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        activeNetwork = cm.getActiveNetworkInfo();
         isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
         setContentView(R.layout.activity_my_stocks);
+        tvNoInternet = (TextView) findViewById(R.id.tv_no_internet);
+
         // The intent service is for executing immediate pulls from the Yahoo API
         // GCMTaskService can only schedule tasks, they cannot execute immediately
         mServiceIntent = new Intent(this, StockIntentService.class);
-        mServiceIntent.putExtra("job","job");
+        mServiceIntent.putExtra("job", "job");
         if (savedInstanceState == null) {
             // Run the initialize task service so that some stocks appear upon an empty database
             mServiceIntent.putExtra("tag", "init");
             if (isConnected) {
                 startService(mServiceIntent);
+                tvNoInternet.setVisibility(View.GONE);
             } else {
-                networkToast();
+                showNetworkTextView();
             }
         }
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -98,19 +107,21 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                     @Override
                     public void onItemClick(View v, int position) {
                         //TODO:
-                        // do something on item click
-//                        mCursorAdapter.getCursor().getString(cursor.getColumnIndex("symbol")
-                        Cursor  cursor = mCursorAdapter.getCursor();
-                        if(cursor.moveToPosition(position))
-                        {
-                            String str = cursor.getString(cursor.getColumnIndex("symbol"));
-                            Toast.makeText(MyStocksActivity.this, str, Toast.LENGTH_SHORT).show();
-                            Intent intentService = new Intent(MyStocksActivity.this, StockIntentService.class);
-                            intentService.putExtra("job","history");
-                            intentService.putExtra("symbol",str);
-                            startService(intentService);
-                            //make Network call
+                        activeNetwork = cm.getActiveNetworkInfo();
+                        isConnected = activeNetwork != null &&
+                                activeNetwork.isConnectedOrConnecting();
+                        if (isConnected) {
 
+                            Cursor cursor = mCursorAdapter.getCursor();
+                            if (cursor.moveToPosition(position)) {
+                                String str = cursor.getString(cursor.getColumnIndex("symbol"));
+                                Intent intent = new Intent(MyStocksActivity.this, StockDetailActivity.class);
+                                intent.putExtra("symbol", str);
+                                startActivity(intent);
+
+                            }
+                        } else {
+                            networkToast();
                         }
                     }
                 }));
@@ -150,6 +161,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                                 }
                             })
                             .show();
+                    tvNoInternet.setVisibility(View.GONE);
                 } else {
                     networkToast();
                 }
@@ -199,6 +211,10 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
 
     public void networkToast() {
         Toast.makeText(mContext, getString(R.string.network_toast), Toast.LENGTH_SHORT).show();
+    }
+
+    public void showNetworkTextView() {
+        tvNoInternet.setVisibility(View.VISIBLE);
     }
 
     public void restoreActionBar() {
@@ -259,48 +275,28 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     }
 
 
-
-    void registerReceiver()
-    {
+    void registerReceiver() {
         if (!isReceiverRegistered) {
             LocalBroadcastManager.getInstance(this).registerReceiver(stockReceiver,
                     new IntentFilter(Utils.LOG_TAG));
-
-            LocalBroadcastManager.getInstance(this).registerReceiver(detailReceiver,
-                    new IntentFilter(StockIntentService.TAG));
         }
     }
 
-    void unRegisterReceiver()
-    {
+    void unRegisterReceiver() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(stockReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(detailReceiver);
     }
+
     private BroadcastReceiver stockReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent!=null)
-            {
-                boolean stockAvail =  intent.getBooleanExtra(getString(R.string.stock_avail),false);
+            if (intent != null) {
+                boolean stockAvail = intent.getBooleanExtra(getString(R.string.stock_avail), false);
                 String stockName = intent.getStringExtra(getString(R.string.stock_name));
-                if(!stockAvail)
-                {
-                    Toast.makeText(MyStocksActivity.this,"Stock Not Available For "+ stockName,Toast.LENGTH_SHORT).show();
+                if (!stockAvail) {
+                    Toast.makeText(MyStocksActivity.this, "Stock Not Available For " + stockName, Toast.LENGTH_SHORT).show();
                 }
             }
         }
-    };  private BroadcastReceiver detailReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(intent!=null)
-            {
-                ArrayList<StockDetail> stockDetailArrayList = new ArrayList<>();
-                stockDetailArrayList =  intent.getParcelableArrayListExtra("detail");
-                Intent intent1 = new Intent(MyStocksActivity.this,StockDetailActivity.class);
-                intent1.putParcelableArrayListExtra("detail",stockDetailArrayList);
-                Log.d(TAG,"length:"+stockDetailArrayList.size());
-                startActivity(intent1);
-            }
-        }
     };
+
 }

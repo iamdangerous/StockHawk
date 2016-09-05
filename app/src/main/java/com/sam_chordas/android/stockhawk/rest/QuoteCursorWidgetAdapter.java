@@ -12,9 +12,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.sam_chordas.android.stockhawk.R;
-import com.sam_chordas.android.stockhawk.data.QuoteColumns;
-import com.sam_chordas.android.stockhawk.data.QuoteProvider;
-import com.sam_chordas.android.stockhawk.touch_helper.ItemTouchHelperAdapter;
 import com.sam_chordas.android.stockhawk.touch_helper.ItemTouchHelperViewHolder;
 
 /**
@@ -89,8 +86,8 @@ public class QuoteCursorWidgetAdapter extends CursorRecyclerViewAdapter<QuoteCur
             super(itemView);
             symbol = (TextView) itemView.findViewById(R.id.stock_symbol);
             symbol.setTypeface(robotoLight);
-            bidPrice = (TextView) itemView.findViewById(R.id.bid_price);
-            change = (TextView) itemView.findViewById(R.id.change);
+            bidPrice = (TextView) itemView.findViewById(R.id.tv_bid_price);
+            change = (TextView) itemView.findViewById(R.id.tv_change);
         }
 
         @Override

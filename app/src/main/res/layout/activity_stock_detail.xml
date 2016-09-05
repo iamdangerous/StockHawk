@@ -10,8 +10,19 @@
     tools:context="com.sam_chordas.android.stockhawk.ui.StockDetailActivity">
 
     <com.github.mikephil.charting.charts.LineChart
+        android:visibility="invisible"
         android:id="@+id/line_chart"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/tv_no_internet"
+        android:visibility="gone"
+        android:textSize="@dimen/tv_internet"
+        android:text="@string/network_toast"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </RelativeLayout>
