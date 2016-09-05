@@ -103,27 +103,29 @@ public class ListWidgetService extends RemoteViewsService {
             rv.setTextViewText(R.id.tv_bid_price,bidPrice);
             rv.setTextViewText(R.id.tv_change,percent_change);
             rv.setTextViewText(R.id.tv_symbol, symbol);
-
-            int sdk = Build.VERSION.SDK_INT;
-
-            if (data.getInt(data.getColumnIndex("is_up")) == 1) {
-                if (sdk < Build.VERSION_CODES.JELLY_BEAN) {
-                    TextView tv;
-//                    tv.setBackground;
-                    rv.setInt(R.id.tv_change,"setBackgroundDrawable",R.drawable.percent_change_pill_green);
-//                    .setBackgroundDrawable(
-//                            mContext.getResources().getDrawable(R.drawable.percent_change_pill_green));
-                } else {
-                    rv.setInt(R.id.tv_change,"setBackground",R.drawable.percent_change_pill_green);
-                }
-            } else {
-                if (sdk < Build.VERSION_CODES.JELLY_BEAN) {
-                    rv.setInt(R.id.tv_change,"setBackgroundDrawable",R.drawable.percent_change_pill_red);
-                } else {
-                    rv.setInt(R.id.tv_change,"setBackground",R.drawable.percent_change_pill_red);
-
-                }
-            }
+//
+//            int sdk = Build.VERSION.SDK_INT;
+//
+//            if (data.getInt(data.getColumnIndex("is_up")) == 1) {
+//                if (sdk < Build.VERSION_CODES.JELLY_BEAN) {
+//                    TextView tv;
+////                    tv.setBackground
+//                    rv.setInt(R.id.tv_change,"setBackgroundDrawable",R.drawable.percent_change_pill_green);
+////                    .setBackgroundDrawable(
+////                            mContext.getResources().getDrawable(R.drawable.percent_change_pill_green));
+//                } else {
+////                    rv.setInt(R.id.tv_change,"setBackground",R.drawable.percent_change_pill_green);
+//                    rv.setInt(R.id.tv_change,"setBackgroundDrawable",R.drawable.percent_change_pill_green);
+//
+//                }
+//            } else {
+//                if (sdk < Build.VERSION_CODES.JELLY_BEAN) {
+//                    rv.setInt(R.id.tv_change,"setBackgroundDrawable",R.drawable.percent_change_pill_red);
+//                } else {
+//                    rv.setInt(R.id.tv_change,"setBackground",R.drawable.percent_change_pill_red);
+//
+//                }
+//            }
 
 
 
