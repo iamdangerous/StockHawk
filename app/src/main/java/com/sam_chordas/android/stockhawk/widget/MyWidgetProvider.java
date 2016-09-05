@@ -2,6 +2,7 @@ package com.sam_chordas.android.stockhawk.widget;
 
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.BroadcastReceiver;
@@ -9,6 +10,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +25,7 @@ import android.widget.RemoteViews;
 import com.sam_chordas.android.stockhawk.Modal.StockWidgetItem;
 import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.service.ListWidgetService;
+import com.sam_chordas.android.stockhawk.service.StockIntentService;
 import com.sam_chordas.android.stockhawk.service.StockTaskService;
 import com.sam_chordas.android.stockhawk.ui.MyStocksActivity;
 import com.sam_chordas.android.stockhawk.ui.StockDetailActivity;
@@ -80,11 +84,11 @@ public class MyWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        Log.d(TAG, "onReceiveCalled");
+//        Log.d(TAG, "onReceiveCalled");
         if (intent != null) {
             Log.d(TAG, "intent Action:" + intent.getAction());
             //execute intent service
-            if (intent.getAction().equals(WidgetActivity.TAG)) {
+            if (intent.getAction().equals(StockTaskService.INTENT_TAG)) {
 
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
                 int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
@@ -92,6 +96,24 @@ public class MyWidgetProvider extends AppWidgetProvider {
 
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.list_view);
 
+            } else if(intent.getAction().equals("android.net.conn.CONNECTIVITY_CHANGE"))
+            {
+                Log.d(TAG,"network Change");
+                ConnectivityManager cm =
+                        (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                boolean isConnected = activeNetwork != null &&
+                        activeNetwork.isConnectedOrConnecting();
+
+                if(isConnected)
+                {
+                   Intent mServiceIntent = new Intent(context, StockIntentService.class);
+                    mServiceIntent.putExtra("job", "job");
+                    mServiceIntent.putExtra("tag", "init");
+                    context.startService(mServiceIntent);
+
+                }
             }
         }
     }

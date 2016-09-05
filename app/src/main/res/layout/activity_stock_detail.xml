@@ -9,7 +9,17 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.sam_chordas.android.stockhawk.ui.StockDetailActivity">
 
+        <TextView
+            android:layout_marginBottom="@dimen/small_margin"
+            android:textSize="28sp"
+            android:text="@string/dummy"
+            android:id="@+id/tv_symbol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
     <com.github.mikephil.charting.charts.LineChart
+        android:layout_below="@+id/tv_symbol"
         android:visibility="invisible"
         android:id="@+id/line_chart"
         android:layout_width="match_parent"

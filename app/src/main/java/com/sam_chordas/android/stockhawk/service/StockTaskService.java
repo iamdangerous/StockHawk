@@ -139,8 +139,8 @@ public class StockTaskService extends GcmTaskService {
                         mContext.getContentResolver().applyBatch(QuoteProvider.AUTHORITY,
                                 batchOperations);
                         //SEND BROADCAST
-                        Intent intent = new Intent(INTENT_TAG);
-                        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+                        updateWidgets();
+
                     } else {
                         Log.d("error:", "No data Found");
                     }
@@ -156,4 +156,11 @@ public class StockTaskService extends GcmTaskService {
         return result;
     }
 
+
+    private void updateWidgets() {
+        // Setting the package ensures that only components in our app will receive the broadcast
+        Intent dataUpdatedIntent = new Intent(StockTaskService.INTENT_TAG)
+                .setPackage(mContext.getPackageName());
+        mContext.sendBroadcast(dataUpdatedIntent);
+    }
 }

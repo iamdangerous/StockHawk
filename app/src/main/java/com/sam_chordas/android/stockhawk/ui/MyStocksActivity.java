@@ -1,7 +1,6 @@
 package com.sam_chordas.android.stockhawk.ui;
 
 import android.app.LoaderManager;
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.CursorLoader;
@@ -11,6 +10,8 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
@@ -28,7 +29,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.sam_chordas.android.stockhawk.Modal.StockDetail;
 import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
@@ -43,11 +43,6 @@ import com.google.android.gms.gcm.Task;
 import com.melnykov.fab.FloatingActionButton;
 import com.sam_chordas.android.stockhawk.touch_helper.SimpleItemTouchHelperCallback;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
-
 public class MyStocksActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     /**
@@ -57,6 +52,9 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
+
+    CoordinatorLayout coordinatorLayout;
+
     String TAG = "StockActivity";
     private CharSequence mTitle;
     private Intent mServiceIntent;
@@ -80,8 +78,9 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
         activeNetwork = cm.getActiveNetworkInfo();
         isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
-        setContentView(R.layout.activity_my_stocks);
+        setContentView(R.layout.activity_my_stocks_new);
         tvNoInternet = (TextView) findViewById(R.id.tv_no_internet);
+        coordinatorLayout = (CoordinatorLayout)findViewById(R.id.coordinator_layout);
 
         // The intent service is for executing immediate pulls from the Yahoo API
         // GCMTaskService can only schedule tasks, they cannot execute immediately
@@ -94,7 +93,26 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                 startService(mServiceIntent);
                 tvNoInternet.setVisibility(View.GONE);
             } else {
-                showNetworkTextView();
+                String[] mProjection =
+                        {
+                                QuoteColumns._ID,
+                                QuoteColumns.SYMBOL,
+                        };
+
+                String mSelectionClause = QuoteColumns.ISCURRENT + " = ?";
+                String mSelectionArgs[] = new String[]{"1"};
+
+                Cursor data = null;
+                data = getContentResolver().query(QuoteProvider.Quotes.CONTENT_URI, mProjection, mSelectionClause, mSelectionArgs, null);
+
+//                Log.d(TAG,"count:"+data.getCount());
+                if(data.getCount()==0)
+                {
+                    showNetworkTextView();
+                }else {
+                    showUpdateToast();
+                }
+                data.close();
             }
         }
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -267,11 +285,35 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mCursorAdapter.swapCursor(data);
         mCursor = data;
+
+        if(data.getCount()!=0)
+        {
+            tvNoInternet.setVisibility(View.GONE);
+        }
+
+        updateWidgets();
+
+//
+//        Intent intent = new Intent(this,MyWidgetProvider.class);
+//        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+//        // Use an array and EXTRA_APPWIDGET_IDS instead of AppWidgetManager.EXTRA_APPWIDGET_ID,
+//        // since it seems the onUpdate() is only fired on that:
+//        int[] ids = {widgetId};
+//        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids);
+//        sendBroadcast(intent);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mCursorAdapter.swapCursor(null);
+    }
+
+
+    private void updateWidgets() {
+        // Setting the package ensures that only components in our app will receive the broadcast
+        Intent dataUpdatedIntent = new Intent(StockTaskService.INTENT_TAG)
+                .setPackage(mContext.getPackageName());
+        mContext.sendBroadcast(dataUpdatedIntent);
     }
 
 
@@ -298,5 +340,13 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
             }
         }
     };
+
+    void showUpdateToast()
+    {
+//        Snackbar snackbar = Snackbar
+//                .make(coordinatorLayout,getString(R.string.requires_internet), Snackbar.LENGTH_LONG);
+//        snackbar.show();
+        Toast.makeText(this,getString(R.string.requires_internet),Toast.LENGTH_SHORT).show();
+    }
 
 }

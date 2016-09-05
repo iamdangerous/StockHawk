@@ -96,13 +96,14 @@ public class ListWidgetService extends RemoteViewsService {
             RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.widget_item);
             Log.d(TAG, "getViewAt");
             String symbol = data.getString(data.getColumnIndex(QuoteColumns.SYMBOL));
+
             String percent_change = data.getString(data.getColumnIndex(QuoteColumns.CHANGE));
             String bidPrice = data.getString(data.getColumnIndex(QuoteColumns.BIDPRICE));
             Log.wtf(TAG,"bidPrice:"+bidPrice);
 
             rv.setTextViewText(R.id.tv_bid_price,bidPrice);
             rv.setTextViewText(R.id.tv_change,percent_change);
-            rv.setTextViewText(R.id.tv_symbol, symbol);
+            rv.setTextViewText(R.id.tv_symbol, symbol.toUpperCase());
 //
 //            int sdk = Build.VERSION.SDK_INT;
 //

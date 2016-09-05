@@ -31,6 +31,8 @@ import java.util.List;
 public class StockDetailActivity extends AppCompatActivity {
 
     LineChart lineChart;
+    TextView tvSymbol;
+
     ArrayList<StockDetail> stockDetailArrayList;
     String date[];
     TextView tvNoInternet;
@@ -43,9 +45,11 @@ public class StockDetailActivity extends AppCompatActivity {
 
         lineChart = (LineChart) findViewById(R.id.line_chart);
         tvNoInternet = (TextView) findViewById(R.id.tv_no_internet);
+        tvSymbol = (TextView)findViewById(R.id.tv_symbol);
 
         if (getIntent() != null) {
             String symbol = getIntent().getStringExtra("symbol");
+            tvSymbol.setText(symbol.toUpperCase());
             loadData(symbol);
         }
 

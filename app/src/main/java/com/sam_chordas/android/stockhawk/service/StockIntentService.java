@@ -44,7 +44,6 @@ public class StockIntentService extends IntentService {
 
         if (intent.getStringExtra("job").equals("history")) {
 
-            String startDate  = "2016-01-01";
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             String endDate = sdf.format(new Date());;
 

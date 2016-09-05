@@ -7,20 +7,22 @@
     <string name="action_change_units">Change Units</string>
     <string name="symbol_search">Symbol Search</string>
     <string name="content_test">Search for a Stock Symbol</string>
-    <string name="input_hint">FB</string>
+    <string name="input_hint" translatable="false">FB</string>
     <string name="input_prefill"></string>
     <string name="network_toast">Uh-oh! This app requires an internet connection</string>
     <string name="add_btn">Add New Stock</string>
-    <string name="stock_avail">stock_avail</string>
-    <string name="stock_name">stock_name</string>
+    <string name="stock_avail" translatable="false">stock_avail</string>
+    <string name="stock_name" translatable="false">stock_name</string>
     <string name="click_add">Tap to add stock</string>
-    <string name="config_activity">This is configuration activity</string>
-    <string name="stock">Stock</string>
+    <string name="config_activity" translatable="false">This is configuration activity</string>
+    <string name="stock" translatable="false">Stock</string>
     <string name="cancel">Cancel</string>
     <string name="done">Done</string>
     <string name="empty_view_text">Nothing to display</string>
-    <string name="stock_widget_item_list">stockWidgetItemList</string>
+    <string name="stock_widget_item_list" translatable="false">stockWidgetItemList</string>
     <string name="stock_detail">Stock Detail</string>
+    <string name="requires_internet">Requires internet connection to update</string>
+    <string name="dummy" translatable="false">Dummy</string>
 
 
 </resources>
