@@ -23,6 +23,7 @@
     <string name="stock_detail">Stock Detail</string>
     <string name="requires_internet">Requires internet connection to update</string>
     <string name="dummy" translatable="false">Dummy</string>
+    <string name="stock_not_avail_for" translatable="false">Stock Not Available For </string>
 
 
 </resources>

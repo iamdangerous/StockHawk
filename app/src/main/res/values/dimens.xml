@@ -10,4 +10,5 @@
     <dimen name="tv_internet">20sp</dimen>
     <dimen name="line_chart">300dp</dimen>
     <dimen name="small_margin">10dp</dimen>
+    <dimen name="rv_padding">48dp</dimen>
 </resources>

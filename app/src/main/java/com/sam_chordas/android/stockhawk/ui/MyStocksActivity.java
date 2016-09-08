@@ -335,7 +335,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                 boolean stockAvail = intent.getBooleanExtra(getString(R.string.stock_avail), false);
                 String stockName = intent.getStringExtra(getString(R.string.stock_name));
                 if (!stockAvail) {
-                    Toast.makeText(MyStocksActivity.this, "Stock Not Available For " + stockName, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MyStocksActivity.this, getString(R.string.stock_not_avail_for) + stockName, Toast.LENGTH_SHORT).show();
                 }
             }
         }
