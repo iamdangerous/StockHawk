@@ -32,3 +32,10 @@ This sample uses the Gradle build system.  To build this project, use the
 ### Required Behavior
 
 * App conforms to common standards found in the Android Nanodegree General Project Guidelines
+
+# Screens
+![screen](../master/screens/list.png)
+
+![screen](../master/screens/search.png)
+
+![screen](../master/screens/widget.png)
