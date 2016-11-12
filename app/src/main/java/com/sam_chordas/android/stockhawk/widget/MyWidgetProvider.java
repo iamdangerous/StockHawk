@@ -96,7 +96,7 @@ public class MyWidgetProvider extends AppWidgetProvider {
 
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.list_view);
 
-            } else if(intent.getAction().equals("android.net.conn.CONNECTIVITY_CHANGE"))
+            } else if(intent.getAction().equals(context.getString(R.string.connectivity_change)))
             {
                 Log.d(TAG,"network Change");
                 ConnectivityManager cm =
@@ -109,8 +109,8 @@ public class MyWidgetProvider extends AppWidgetProvider {
                 if(isConnected)
                 {
                    Intent mServiceIntent = new Intent(context, StockIntentService.class);
-                    mServiceIntent.putExtra("job", "job");
-                    mServiceIntent.putExtra("tag", "init");
+                    mServiceIntent.putExtra(context.getString(R.string.job), context.getString(R.string.job));
+                    mServiceIntent.putExtra(context.getString(R.string.tag), context.getString(R.string.init));
                     context.startService(mServiceIntent);
 
                 }

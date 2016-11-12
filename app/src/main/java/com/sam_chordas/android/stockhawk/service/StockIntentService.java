@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.TaskParams;
 import com.sam_chordas.android.stockhawk.Modal.StockDetail;
+import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.ui.MyStocksActivity;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -42,7 +43,7 @@ public class StockIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Log.d(StockIntentService.class.getSimpleName(), "Stock Intent Service");
 
-        if (intent.getStringExtra("job").equals("history")) {
+        if (intent.getStringExtra(getString(R.string.job)).equals(getString(R.string.history))) {
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             String endDate = sdf.format(new Date());;
@@ -112,12 +113,12 @@ public class StockIntentService extends IntentService {
         } else {
             StockTaskService stockTaskService = new StockTaskService(this);
             Bundle args = new Bundle();
-            if (intent.getStringExtra("tag").equals("add")) {
-                args.putString("symbol", intent.getStringExtra("symbol"));
+            if (intent.getStringExtra(getString(R.string.tag)).equals(getString(R.string.add))) {
+                args.putString(getString(R.string.symbol), intent.getStringExtra(getString(R.string.symbol)));
             }
             // We can call OnRunTask from the intent service to force it to run immediately instead of
             // scheduling a task.
-            stockTaskService.onRunTask(new TaskParams(intent.getStringExtra("tag"), args));
+            stockTaskService.onRunTask(new TaskParams(intent.getStringExtra(getString(R.string.tag)), args));
         }
 
     }

@@ -85,10 +85,10 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
         // The intent service is for executing immediate pulls from the Yahoo API
         // GCMTaskService can only schedule tasks, they cannot execute immediately
         mServiceIntent = new Intent(this, StockIntentService.class);
-        mServiceIntent.putExtra("job", "job");
+        mServiceIntent.putExtra(getString(R.string.job), getString(R.string.job));
         if (savedInstanceState == null) {
             // Run the initialize task service so that some stocks appear upon an empty database
-            mServiceIntent.putExtra("tag", "init");
+            mServiceIntent.putExtra(getString(R.string.tag),getString(R.string.init));
             if (isConnected) {
                 startService(mServiceIntent);
                 tvNoInternet.setVisibility(View.GONE);
@@ -134,7 +134,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                             if (cursor.moveToPosition(position)) {
                                 String str = cursor.getString(cursor.getColumnIndex("symbol"));
                                 Intent intent = new Intent(MyStocksActivity.this, StockDetailActivity.class);
-                                intent.putExtra("symbol", str);
+                                intent.putExtra(getString(R.string.symbol), str);
                                 startActivity(intent);
 
                             }
@@ -165,15 +165,15 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                                             new String[]{input.toString()}, null);
                                     if (c.getCount() != 0) {
                                         Toast toast =
-                                                Toast.makeText(MyStocksActivity.this, "This stock is already saved!",
+                                                Toast.makeText(MyStocksActivity.this, getString(R.string.stock_already_saved),
                                                         Toast.LENGTH_LONG);
                                         toast.setGravity(Gravity.CENTER, Gravity.CENTER, 0);
                                         toast.show();
                                         return;
                                     } else {
                                         // Add the stock to DB
-                                        mServiceIntent.putExtra("tag", "add");
-                                        mServiceIntent.putExtra("symbol", input.toString());
+                                        mServiceIntent.putExtra(getString(R.string.tag), getString(R.string.add));
+                                        mServiceIntent.putExtra(getString(R.string.symbol), input.toString());
                                         startService(mServiceIntent);
                                     }
                                 }

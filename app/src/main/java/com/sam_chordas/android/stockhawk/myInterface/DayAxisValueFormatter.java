@@ -4,6 +4,7 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.AxisValueFormatter;
 import com.sam_chordas.android.stockhawk.Modal.StockDetail;
+import com.sam_chordas.android.stockhawk.R;
 
 import java.util.ArrayList;
 
@@ -11,9 +12,6 @@ import java.util.ArrayList;
  * Created by lohra on 9/5/2016.
  */
 public class DayAxisValueFormatter implements AxisValueFormatter{
-    protected String[] mMonths = new String[]{
-            "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"
-    };
 
     private LineChart chart;
 

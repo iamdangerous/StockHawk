@@ -48,7 +48,7 @@ public class StockDetailActivity extends AppCompatActivity {
         tvSymbol = (TextView)findViewById(R.id.tv_symbol);
 
         if (getIntent() != null) {
-            String symbol = getIntent().getStringExtra("symbol");
+            String symbol = getIntent().getStringExtra(getString(R.string.symbol));
             tvSymbol.setText(symbol.toUpperCase());
             loadData(symbol);
         }
@@ -64,8 +64,8 @@ public class StockDetailActivity extends AppCompatActivity {
                 activeNetwork.isConnectedOrConnecting();
         if (isConnected) {
             Intent intentService = new Intent(this, StockIntentService.class);
-            intentService.putExtra("job", "history");
-            intentService.putExtra("symbol", symbol);
+            intentService.putExtra(getString(R.string.job), getString(R.string.history));
+            intentService.putExtra(getString(R.string.symbol), symbol);
             startService(intentService);
 
         } else {
